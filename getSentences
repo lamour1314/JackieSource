@@ -1,0 +1,39 @@
+	private final char[] terminator = { '。', '！', '？', '!', '?' };
+	
+	protected List<String> getTextSentences(String inPath, Charset charset) {
+		List<String> sentences = new ArrayList<>();
+		List<String> tmp;
+		BufferedReader reader = getReader(inPath, charset);
+		try {
+			for (String line; (line = reader.readLine()) != null;) {
+				if (line.trim().length() > 0) {
+					tmp = getAllSentences(line);
+					for (int i = 0; i < tmp.size(); i++) {
+						sentences.add(tmp.get(i));
+					}
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return sentences;
+	}
+
+	private boolean isContainTerminator(String line) {
+		return StringUtils.containsAny(line, terminator);
+	}
+	
+	
+		protected static BufferedReader getReader(String inPath, Charset charset) {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(
+					new FileInputStream(new File(inPath)), charset));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			// e.printStackTrace();
+			System.out.println("Not Found File");
+		}
+		return reader;
+	}
