@@ -1,0 +1,189 @@
+
+//ICTCLAS在linux下使用示例
+安装compat-libstdc++-33 package
+终端中输入一下两条命令
+# yum install compat-libstdc++-33
+# yum install 'libstdc++.so.5'
+
+
+package ICTCLAS.I3S.AC;
+import java.io.*;
+public class ICTCLAS50
+{
+	//public enum eCodeType
+	//{
+	//    CODE_TYPE_UNKNOWN,//type unknown 
+	//    CODE_TYPE_ASCII,//ASCII
+	//    CODE_TYPE_GB,//GB2312,GBK,GB10380
+	//    CODE_TYPE_UTF8,//UTF-8
+	//    CODE_TYPE_BIG5//BIG5
+	//}
+	
+	public native boolean ICTCLAS_Init(byte[] sPath);
+	public native boolean ICTCLAS_Exit();
+	public native int ICTCLAS_ImportUserDictFile(byte[] sPath,int eCodeType);
+	public native int ICTCLAS_SaveTheUsrDic();
+	public native int ICTCLAS_SetPOSmap(int nPOSmap);
+	public native boolean ICTCLAS_FileProcess(byte[] sSrcFilename, int eCodeType, int bPOSTagged,byte[] sDestFilename);
+	public native byte[] ICTCLAS_ParagraphProcess(byte[] sSrc, int eCodeType, int bPOSTagged);
+	public native byte[] nativeProcAPara(byte[] sSrc, int eCodeType, int bPOStagged);
+	/* Use static intializer */
+	static
+	{
+		//System.loadLibrary("ICTCLAS50");  //windows 下加载此项
+		System.load(System.getProperty("user.dir") + "/libICTCLAS50.so");
+	}
+}
+
+//====================================================================
+
+
+package com.nlp.core.app;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
+import ICTCLAS.I3S.AC.ICTCLAS50;
+
+import com.nlp.core.text.BasicNLP;
+import com.nlp.model.XmlConfigure;
+
+public class UsrDicICTCLAS50 extends BasicNLP {
+
+	private final static String argu = ".";
+	private static ICTCLAS50 SegTager;
+	private static byte[] usrdicb;
+	private static int nCount;
+	private static byte[] segTagResult;
+
+	public static void main(String[] args) {
+		UsrDicICTCLAS50 segTager = new UsrDicICTCLAS50();
+		XmlLoader xloader = new XmlLoader();
+		XmlConfigure xmlLoader = xloader.loader();
+		String inPath = xmlLoader.getInPath();
+
+		segTager.SegTagIni(xmlLoader.getEncoding());
+//		File file = new File(inPath);
+
+		segTager.getFiles(inPath);
+
+		for (String pathname : segTager.filelist) {
+			System.out.println(pathname);
+			File file = new File(pathname);
+			String tmp = segTager.getDir(pathname);
+			System.out.println(tmp);
+			String outPath = xmlLoader.getOutPath() + tmp.substring(tmp.indexOf("inPath") + 6);
+			System.out.println(outPath);
+			try {
+				File outFile = new File(outPath);
+				if(!outFile.isDirectory())
+					outFile.mkdir();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			outPath += "/" + file.getName();
+			System.out.println(outPath);
+			BufferedReader reader = getReader(pathname, segTager.getCharset(xmlLoader.getEncoding()));
+			Writer writer = segTager.getWriter(outPath);
+			String outLine;
+			try {
+				for (String line; (line = reader.readLine()) != null;) {
+					outLine = segTager.segTagRunner(line.trim(),
+							xmlLoader.getEncoding()).trim();
+					writer.write(outLine + "\r\n");
+					System.out.println(outLine);
+				}
+				writer.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void SegTagIni(String charsetname) {
+
+		try {
+			SegTager = new ICTCLAS50();
+
+			if (SegTager.ICTCLAS_Init(argu.getBytes(charsetname)) == false) {
+				System.out.println("Initial Fail!");
+			} else
+				System.out.println("Initial Succeed!");
+			nCount = 0;
+			String usrdic = "userdict.utf-8.txt";
+			usrdicb = usrdic.getBytes();
+
+			nCount = SegTager.ICTCLAS_ImportUserDictFile(usrdicb, 2);
+			System.out.println("Usr Dic num：" + nCount);
+			nCount = 0;
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public String segTagRunner(String inPut, String charsetname) {
+		String outResult = "";
+		try {
+
+			segTagResult = SegTager.ICTCLAS_ParagraphProcess(
+					inPut.getBytes(charsetname), 0, 1);
+
+			outResult = new String(segTagResult, 0, segTagResult.length,
+					charsetname);
+			// System.out.println(outResult);
+			return outResult;
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return outResult;
+	}
+
+	public void SegTagInUsrDic(String inPut, String charsetname) {
+		try {
+			SegTager = new ICTCLAS50();
+
+			if (SegTager.ICTCLAS_Init(argu.getBytes(charsetname)) == false) {
+				System.out.println("Initial Fail!");
+			} else {
+				System.out.println("Initial Succeed!");
+			}
+
+			int nCount = 0;
+			String usrdic = "userdict.txt";
+			byte[] usrdicb = usrdic.getBytes();
+
+			nCount = SegTager.ICTCLAS_ImportUserDictFile(usrdicb, 2);
+			System.out.println("Usr Dic num：" + nCount);
+			nCount = 0;
+
+			segTagResult = SegTager.ICTCLAS_ParagraphProcess(
+					inPut.getBytes(charsetname), 0, 1);
+
+			String outResult = new String(segTagResult, 0, segTagResult.length,
+					charsetname);
+			System.out.println("Usr Dic num：" + outResult);
+
+			SegTager.ICTCLAS_Exit();
+
+		} catch (Exception ex) {
+
+		}
+	}
+	
+	public void ICTCLASExit(){
+		SegTager.ICTCLAS_Exit();
+	}
+
+}
+
