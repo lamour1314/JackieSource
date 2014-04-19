@@ -1,3 +1,6 @@
+	
+	//中文断句
+	
 	private final char[] terminator = { '。', '！', '？', '!', '?' };
 	
 	protected List<String> getTextSentences(String inPath, Charset charset) {
@@ -19,13 +22,17 @@
 		}
 		return sentences;
 	}
+	//============================================================
+	
+	//判断一个字符串是否包含句末标点
 
 	private boolean isContainTerminator(String line) {
 		return StringUtils.containsAny(line, terminator);
 	}
 	
-	
-		protected static BufferedReader getReader(String inPath, Charset charset) {
+	//=============================================================
+	//读取文本，返回BufferedReader
+	protected static BufferedReader getReader(String inPath, Charset charset) {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new InputStreamReader(
@@ -37,3 +44,4 @@
 		}
 		return reader;
 	}
+	//==============================================================
