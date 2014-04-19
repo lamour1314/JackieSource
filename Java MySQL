@@ -1,0 +1,41 @@
+
+
+  //1.检查JDBC驱动是否存在
+  
+	public static void checkJDBC() {
+		try{
+            //调用Class.forName()方法加载驱动程序
+            Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("成功加载MySQL驱动！");
+        }catch(ClassNotFoundException e1){
+            System.out.println("找不到MySQL驱动!");
+            e1.printStackTrace();
+        }
+	}
+
+
+  //2.创建连接
+  
+  public static void Connection(Connection conn, Statement stmt, String url, String usr, String code){
+		try {
+			conn = DriverManager.getConnection(url, usr, code);
+			//创建一个Statement对象
+			stmt = conn.createStatement(); //创建Statement对象
+			System.out.print("成功连接到数据库！");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	//3.关闭数据库
+	
+	public static void closeDatabase(Connection conn, Statement stmt){
+		try {
+			conn.close();
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
