@@ -190,7 +190,7 @@ public class UsrDicICTCLAS50 extends BasicNLP {
 		SegTager.ICTCLAS_Exit();
 	}
 	
-	//加载多部用户词典
+	//初始化子与资源并加载多部用户词典
 	public void SegTagIni(String charsetname) {
 		//String usrdic;
 		ConfigDict configDic = new ConfigDict();
@@ -222,5 +222,73 @@ public class UsrDicICTCLAS50 extends BasicNLP {
 		System.out.println(dicName + " num:" + nCount);
 	}
 
+}
+
+
+//================================================================================
+
+//初始化用户词典配置，返回待载入用户词典列表
+
+package com.nlp.core.app;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
+public class ConfigDict {
+
+	public static final String sysPath = System.getProperty("user.dir");
+	public static final String iniPath = System.getProperty("user.dir")
+			+ "/ConifgDic.xml";
+
+	public List<String> loader() {
+
+		List<String> dicList = new ArrayList<>();
+		SAXReader reader = new SAXReader();
+
+		File file = new File(iniPath);
+		try {
+			Document document = reader.read(file);
+			Element root = document.getRootElement();
+			List<Element> list = root.elements();
+
+			for (int i = 0; i < list.size(); i++) {
+				// System.out.println(list.get(i).getText());
+				switch (list.get(i).getName()) {
+				case "usrDic":
+					if (list.get(i).getText().equals("on"))
+						dicList.add("userdict.txt");
+					break;
+				case "sentiDic":
+					if (list.get(i).getText().equals("on"))
+						dicList.add("dic.senti");
+					break;
+				case "pragDic":
+					if (list.get(i).getText().equals("on"))
+						dicList.add("dic.lm");
+					break;
+				case "nrDic":
+					if (list.get(i).getText().equals("on"))
+						dicList.add("dic.nr");
+					break;
+				}
+			}
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return dicList;
+	}
+
+	public static void main(String[] args) {
+		ConfigDict xl = new ConfigDict();
+		xl.loader();
+	}
 }
 
