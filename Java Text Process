@@ -56,3 +56,18 @@
 		}
 	}
 	//=================================================
+	
+	//读取文本，返回BufferedReader
+	protected static BufferedReader getReader(String inPath, Charset charset) {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(
+					new FileInputStream(new File(inPath)), charset));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			// e.printStackTrace();
+			System.out.println("Not Found File");
+		}
+		return reader;
+	}
+	//=================================================
