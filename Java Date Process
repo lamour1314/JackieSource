@@ -1,3 +1,6 @@
+	
+	//返回指定日期的前一天
+	
 	public static Date getSpecialLastOneDay(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -5,6 +8,9 @@
 		date = calendar.getTime();
 		return date;
 	}
+	//==================================================
+	
+	//返回当前日期的前一天
 
 	public static String getLastOneDay() {
 		Date date;
@@ -15,3 +21,4 @@
 		String dateString = formatter.format(date);
 		return dateString;
 	}
+	//==================================================
