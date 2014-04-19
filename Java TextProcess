@@ -1,0 +1,58 @@
+	//获取文件夹下所有文件
+	
+	protected void getFiles(String path) {
+		File file = new File(path);
+		File[] array = file.listFiles();
+
+		for (int i = 0; i < array.length; i++) {
+			if (array[i].isFile()) {
+				filelist.add(array[i].getPath());
+			} else if (array[i].isDirectory()) {
+				getFiles(array[i].getPath());
+			}
+		}
+	}
+	
+	private List<String> doGetFiles(String inPath){
+		List<String> filelist = new ArrayList<>();
+		getFiles(inPath);
+		return filelist;
+	}
+  //===============================================
+  
+  //向文本（path）追加内容
+  
+  	protected void appendFile(String path, String str) {// 将抽奖结果保存到文件中
+		FileWriter fw;
+		BufferedWriter bf;
+		try {
+
+			fw = new FileWriter(path, true);// 同时创建新文件
+			// 创建字符输出流对象
+			bf = new BufferedWriter(fw);
+			// 创建缓冲字符输出流对象
+			bf.append(str + "\r\n");
+			bf.flush();
+			bf.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	//================================================
+	
+	
+	// 删除文件夹下所有内容
+	// param folderPath 文件夹完整绝对路径
+
+	protected void delFolder(String folderPath) {
+		try {
+			delAllFile(folderPath); // 删除完里面所有内容
+			String filePath = folderPath;
+			filePath = filePath.toString();
+			java.io.File myFilePath = new java.io.File(filePath);
+			myFilePath.delete(); // 删除空文件夹
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	//=================================================
