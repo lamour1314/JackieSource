@@ -71,3 +71,15 @@
 		return reader;
 	}
 	//=================================================
+	
+	//返回写入文本的Writer对象，此函数写出系统默认的字符集
+	protected Writer getWriter(String outPath) {
+		try {
+			writer = new PrintWriter(new File(outPath));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return writer;
+	}
+	//=================================================
