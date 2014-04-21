@@ -103,7 +103,6 @@
 
 		appendFile(outFile, line);
 	}
-
 	protected void appendFile(String path, String str) {
 		FileWriter fw;
 		BufferedWriter bf;
@@ -119,3 +118,4 @@
 			e.printStackTrace();
 		}
 	}
+	//=================================================
