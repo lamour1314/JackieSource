@@ -1,0 +1,25 @@
+
+  //新词语
+	public void getNewWordwithHashCode(List<String> fileList, String outPath){
+		BufferedReader reader;
+		Hashtable<String, Integer> wordlist;
+		File file;
+		for(String filePath : fileList){
+			reader = getReader(filePath, Charset.defaultCharset());
+		}
+	}
+	
+	public List<String> getNewwordList(BufferedReader reader){
+		List<String> newwordList = new ArrayList<>();
+		List<String> lineList;
+		try {
+			for(String line; (line = reader.readLine()) != null;){
+				
+				
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return newwordList;
+	}
