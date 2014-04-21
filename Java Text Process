@@ -83,3 +83,39 @@
 		return writer;
 	}
 	//=================================================
+	
+	//按照字符串的HashCode输入到文本中
+	public void outPutwithHashCode(String outPath, String line) {
+		try {
+			File outDir = new File(outPath);
+			if (outDir.isFile()) {
+				System.out.println("请指定正确的输出路径");
+				return;
+			}
+			if (!outDir.isDirectory())
+				outDir.mkdir();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			// e1.printStackTrace();
+			System.out.println("输出路径错误");
+		}
+		String outFile = outPath + "/" + line.hashCode() / 10000;
+
+		appendFile(outFile, line);
+	}
+
+	protected void appendFile(String path, String str) {
+		FileWriter fw;
+		BufferedWriter bf;
+		try {
+			fw = new FileWriter(path, true);// 同时创建新文件
+			// 创建字符输出流对象
+			bf = new BufferedWriter(fw);
+			// 创建缓冲字符输出流对象
+			bf.append(str + "\n");
+			bf.flush();
+			bf.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
