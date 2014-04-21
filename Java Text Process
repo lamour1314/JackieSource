@@ -1,22 +1,22 @@
 	//获取文件夹下所有文件
 	
-	protected void getFiles(String path) {
+	protected void getFile(String path, List<String> list) {
 		File file = new File(path);
 		File[] array = file.listFiles();
 
 		for (int i = 0; i < array.length; i++) {
 			if (array[i].isFile()) {
-				filelist.add(array[i].getPath());
+				list.add(array[i].getPath());
 			} else if (array[i].isDirectory()) {
 				getFiles(array[i].getPath());
 			}
 		}
 	}
 	
-	private List<String> doGetFiles(String inPath){
-		List<String> filelist = new ArrayList<>();
-		getFiles(inPath);
-		return filelist;
+	protected List<String> doGetFiles(String inPath){
+		List<String> list = new ArrayList<>();
+		getFile(inPath, list);
+		return list;
 	}
   //===============================================
   
