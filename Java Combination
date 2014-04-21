@@ -1,0 +1,141 @@
+package com.nlp.core.text;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
+public class Combination {
+
+	public static void main(String[] args) {
+		String line = "## 您好  今天  是  星期一 。  ##";
+		String keyword = "是";
+		String [] array = StringUtils.split(line);
+		Combination cm = new Combination();
+		cm.getCombination(line, keyword, 1, 2);
+		System.out.println("ok");
+	}
+	
+	/***
+	 * 提取关键词前N项和后N项
+	 * @param line
+	 * @param keyword
+	 * @param foreItemNum
+	 * @param backItemNum
+	 */
+	public void getCombination(String line, String keyword, int foreItemNum, int backItemNum){
+		String array[];
+		String outPutLeft, outPutRight;
+		int pos, len;
+		List leftList, rightList;
+		array = segline2Array(line);
+		pos = getKeywordIndex(array, keyword);
+		len = array.length;
+		if(!isOutofIndex(len, getKeywordIndex(array, keyword), foreItemNum, backItemNum)){
+			leftList = getForeIndexList(pos, foreItemNum);
+			rightList = getBackIndexList(pos, backItemNum);
+			outPutLeft = getIndexStrFromList(segline2List(line), leftList);
+			outPutRight = getIndexStrFromList(segline2List(line), rightList);
+			
+			System.out.println("L:" + outPutLeft);
+			System.out.println("R:" + outPutRight);
+		}else{
+			System.out.println("no");
+		}
+	}
+	
+	/***
+	 * pos左右的itemNum是否超出数组范围内
+	 * @param len	数组长度
+	 * @param pos	关键词索引
+	 * @param foreItemNum	关键词左侧项数
+	 * @param backItemNum	关键词右侧项数
+	 * @return	false表示没有出数组范围；
+	 * 			true表示超出数组范围。
+	 */
+	public boolean isOutofIndex(int len, int pos, int foreItemNum, int backItemNum){
+		if(foreItemNum > pos || pos + backItemNum >= len){
+			return true;
+		}
+		return false;
+	}
+	/***
+	 * 返回输入词在输入数组中的索引
+	 * -1表示输入数组中无keyword
+	 * @param array
+	 * @param keyword
+	 * @return
+	 */
+	public int getKeywordIndex(String[] array, String keyword){
+		int pos = -1;
+		for(int i = 0; i < array.length; i++){
+			if(array[i].equals(keyword)){
+				pos = i;
+			}
+		}
+		return pos;
+	}
+	
+	/***
+	 * 分词标注语句转为以词为单位的数组
+	 * @param segline
+	 * @return
+	 */
+	public String[] segline2Array(String segline){
+		return StringUtils.split(segline);
+	}
+	
+	/***
+	 * 分词标注语句转为以词为单位的列表
+	 * @param segline
+	 * @return
+	 */
+	public List segline2List(String segline){
+		return Arrays.asList(StringUtils.split(segline));
+	}
+	/***
+	 * 语句转为以输入分隔符分割后的单位为元素的列表
+	 * @param segline
+	 * @return
+	 */
+	public List segline2ListwithSeperator(String segline, String seperator){
+		return Arrays.asList(StringUtils.split(segline, seperator));
+	}
+	
+	/***
+	 * 获取pos前foreItemNum项的索引，并加入list
+	 * @param pos
+	 * @param foreItemNum
+	 * @return
+	 */
+	public List getForeIndexList(int pos, int foreItemNum){
+		List list = new ArrayList<>();
+		for(int i = pos - foreItemNum; i < pos; i++){
+			list.add(i);
+		}
+		return list;
+	}
+	
+	/***
+	 * 获取pos后backItemNum项的索引，并加入list
+	 * @param pos
+	 * @param backItemNum
+	 * @return
+	 */
+	public List getBackIndexList(int pos, int backItemNum){
+		List list = new ArrayList<>();
+		for(int i = pos + 1; i <= pos + backItemNum; i++){
+			list.add(i);
+		}
+		return list;
+	}
+	
+	public String getIndexStrFromList(List itemList, List indexList){
+		String str = "";
+		for(int i = 0; i < indexList.size(); i++){
+			str += itemList.get(Integer.parseInt(String.valueOf(indexList.get(i)))) + " ";
+		}
+		return str;
+	}
+}
