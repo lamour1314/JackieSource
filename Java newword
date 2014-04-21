@@ -1,4 +1,3 @@
-
   //新词语
 	public void getNewWordwithHashCode(List<String> fileList, String outPath){
 		BufferedReader reader;
@@ -7,6 +6,12 @@
 		for(String filePath : fileList){
 			reader = getReader(filePath, Charset.defaultCharset());
 		}
+	}
+	
+	public List<String> getNewwordListInOneLine(String line){
+		List<String> wordlist = new ArrayList<>();
+		
+		return wordlist;
 	}
 	
 	public List<String> getNewwordList(BufferedReader reader){
