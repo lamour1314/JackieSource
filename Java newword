@@ -28,3 +28,61 @@
 		}
 		return newwordList;
 	}
+
+
+//********************************************************
+	public Hashtable<String, Cword> wordCounterwithFreTextNum(BufferedReader reader){
+		Hashtable<String, Cword> wordHash = new Hashtable<>();
+		String[] array;
+		String word, hashcode;
+		Cword cw;
+		Set<String> set;
+		try {
+			for(String line; (line = reader.readLine()) != null;){
+				array = StringUtils.split(line, "\t");
+				word = array[0];
+				hashcode = array[1];
+				if(wordHash.containsKey(word)){
+					cw = wordHash.get(word);
+					cw.fre++;
+					if(!cw.set.contains(hashcode)){
+						cw.set.add(hashcode);
+					}
+					wordHash.put(word, cw);
+				}else{
+					set = new HashSet<>();
+					set.add(hashcode);
+					cw = new Cword(1, set);
+					wordHash.put(word, cw);
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return wordHash;
+	}
+	
+	protected void wordCounterPrinter(Hashtable<String, Cword> wordFreTxtNumCounter,
+			String outPath, Charset charset) {
+		Writer writer = getWriter(outPath);
+		String outLine;
+		Cword cw;
+		try {
+			if (wordFreTxtNumCounter.size() > 0) {
+				Set<String> keys = wordFreTxtNumCounter.keySet();
+				for (String key : keys) {
+					cw = wordFreTxtNumCounter.get(key);
+					outLine = key + "\t" + cw.fre + "\t" + cw.set.size();
+					// System.out.println("print:" + outLine);
+
+					writer.write(outLine + "\n");
+				}
+			}
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	//************************************************
