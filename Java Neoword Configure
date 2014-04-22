@@ -39,3 +39,57 @@ public class Configure {
 	}
 	
 }
+
+//=================================================================
+package com.test;
+
+import java.io.File;
+import java.util.List;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
+
+
+public class LoadConfigure {
+	public static final String sysPath = System.getProperty("user.dir");
+	public static final String iniPath = System.getProperty("user.dir") + "/configure.xml";
+	
+	public Configure loader(){
+		Configure xconf = new Configure();
+		SAXReader reader = new SAXReader();
+
+		File file = new File(iniPath);
+		try {
+			Document document = reader.read(file);
+			Element root = document.getRootElement();
+			List<Element> list = root.elements();
+			
+			for(int i = 0; i < list.size(); i++){
+				switch(list.get(i).getName()){
+					case "inPath": 
+						xconf.setInPath(sysPath + "/" + list.get(i).getText());
+						break;
+					case "outPath":
+						xconf.setOutPath(sysPath + "/" + list.get(i).getText());
+						break;
+					case "inEncoding":
+						xconf.setInEncoding(list.get(i).getText());
+						break;
+					case "outEncoding":
+						xconf.setOutEncoding(list.get(i).getText());
+						break;
+					case "SegmentAvailable":
+						xconf.setSegmentAvailable(list.get(i).getText());
+						break;
+				}
+			}
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return xconf;
+	}
+}
