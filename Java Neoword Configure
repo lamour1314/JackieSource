@@ -1,0 +1,41 @@
+package com.test;
+
+public class Configure {
+
+	String inPath;
+	String outPath;
+	String SegmentAvailable;
+	String outEncoding;
+	String inEncoding;
+	public String getInPath() {
+		return inPath;
+	}
+	public void setInPath(String inPath) {
+		this.inPath = inPath;
+	}
+	public String getOutPath() {
+		return outPath;
+	}
+	public void setOutPath(String outPath) {
+		this.outPath = outPath;
+	}
+	public String getSegmentAvailable() {
+		return SegmentAvailable;
+	}
+	public void setSegmentAvailable(String segmentAvailable) {
+		SegmentAvailable = segmentAvailable;
+	}
+	public String getOutEncoding() {
+		return outEncoding;
+	}
+	public void setOutEncoding(String outEncoding) {
+		this.outEncoding = outEncoding;
+	}
+	public String getInEncoding() {
+		return inEncoding;
+	}
+	public void setInEncoding(String inEncoding) {
+		this.inEncoding = inEncoding;
+	}
+	
+}
