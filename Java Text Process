@@ -1,3 +1,4 @@
+	
 	//获取文件夹下所有文件
 	
 	protected void getFile(String path, List<String> list) {
@@ -117,5 +118,25 @@
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	//=================================================
+	//获取BufferedWriter
+	protected BufferedWriter getBuffWriter(String outPath, Charset charset) {
+		BufferedWriter writer = null;
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(new File(outPath)),
+					Charset.defaultCharset()));
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return writer;
+	}
+	//=================================================
+	//获取字符集
+	protected Charset getCharset(String charsetName) {
+		return Charset.forName(charsetName);
 	}
 	//=================================================
