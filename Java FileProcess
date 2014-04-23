@@ -140,3 +140,48 @@
 		return Charset.forName(charsetName);
 	}
 	//=================================================
+
+	public void TransformEncoding(String inPath, String outPath){
+		List<String> filelist;
+		String curCode, outFilePath, dir, fileName, outDir;
+		BufferedReader reader;
+		BufferedWriter writer;
+		File file;
+		int num = 1;
+		filelist = getAllFiles(inPath);
+		for(String filePath : filelist){
+			curCode = getFileChart(filePath);
+			file = new File(filePath);
+			dir = file.getParent().substring(file.getParent().toString().indexOf("inPut") + 6);
+			System.out.println(dir);
+			fileName = file.getName();
+			System.out.println(fileName);
+			outDir = outPath + "/" + dir;
+			System.out.println(outDir);
+			file = new File(outDir);
+			if(!file.exists()){
+				file.mkdirs();
+			}
+			
+			outFilePath = outDir + "/" + fileName;
+			System.out.println(outFilePath);
+			writer = getBuffWriter(outFilePath, Charset.defaultCharset());
+			reader = getReader(filePath, Charset.forName(curCode));
+			System.out.println(num + "/" + filelist.size());
+			num++;
+			try {
+				for(String line; (line = reader.readLine()) != null;){
+					writer.write(line);
+					writer.flush();
+					writer.newLine();
+				}
+				reader.close();
+				writer.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		System.out.println("ok");
+	}
+	//=================================================
